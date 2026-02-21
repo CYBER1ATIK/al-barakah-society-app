@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AL BARAKAH SOCIETY</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loginPage" class="login">
+    <h1>AL BARAKAH SOCIETY</h1>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+</div>
+
+<div id="app" class="app hidden">
+
+    <div class="sidebar">
+        <h2>Foundation Panel</h2>
+        <button onclick="showDashboard()">Dashboard</button>
+        <button onclick="showMembers()">Members</button>
+        <button onclick="showReports()">Reports</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <div class="content">
+        <h2 id="roleTitle"></h2>
+        <div id="main"></div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

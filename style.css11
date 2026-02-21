@@ -1,0 +1,61 @@
+body{
+    margin:0;
+    font-family: Arial;
+    background:#0B1C2D;
+    color:white;
+}
+
+.hidden{ display:none; }
+
+.login{
+    width:320px;
+    margin:120px auto;
+    text-align:center;
+    padding:30px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button{
+    padding:10px 15px;
+    background:#C6A85E;
+    border:none;
+    cursor:pointer;
+    transition:0.3s;
+    border-radius:8px;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+.app{
+    display:flex;
+    height:100vh;
+}
+
+.sidebar{
+    width:220px;
+    background:#081521;
+    padding:20px;
+}
+
+.content{
+    flex:1;
+    padding:20px;
+    overflow:auto;
+}
+
+.card{
+    background:rgba(255,255,255,0.08);
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+}

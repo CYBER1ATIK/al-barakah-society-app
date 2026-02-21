@@ -1,0 +1,93 @@
+let currentUser = null;
+
+const defaultUsers = [
+{username:"developer_master", password:"Dev@123Secure", role:"developer"},
+{username:"admin_manager", password:"Admin@456Secure", role:"admin"}
+];
+
+if(!localStorage.getItem("users")){
+localStorage.setItem("users", JSON.stringify(defaultUsers));
+localStorage.setItem("members", JSON.stringify([]));
+}
+
+function login(){
+let u = username.value;
+let p = password.value;
+
+let users = JSON.parse(localStorage.getItem("users"));
+let user = users.find(x=>x.username===u && x.password===p);
+
+if(user){
+currentUser=user;
+loginPage.classList.add("hidden");
+app.classList.remove("hidden");
+roleTitle.innerText="Welcome "+user.role.toUpperCase();
+showDashboard();
+}else{
+alert("Wrong Login");
+}
+}
+
+function logout(){
+location.reload();
+}
+
+function showDashboard(){
+let members = JSON.parse(localStorage.getItem("members"));
+let total = members.reduce((sum,m)=> sum + (m.fee || 0),0);
+
+main.innerHTML=`
+<div class="card">Total Members: ${members.length}</div>
+<div class="card">Total Collected: ${total}</div>
+`;
+}
+
+function showMembers(){
+let members = JSON.parse(localStorage.getItem("members"));
+
+let html=`<h3>Members</h3>`;
+
+if(currentUser.role!=="member"){
+html+=`
+<input id="mname" placeholder="Name">
+<input id="mpos" placeholder="Position">
+<input id="mfee" placeholder="Monthly Fee">
+<button onclick="addMember()">Add Member</button>
+`;
+}
+
+members.forEach((m,i)=>{
+html+=`
+<div class="card">
+Name: ${m.name}<br>
+Position: ${m.position}<br>
+Fee: ${m.fee}<br>
+${currentUser.role==="developer" ? `<button onclick="removeMember(${i})">Kick</button>`:""}
+</div>
+`;
+});
+
+main.innerHTML=html;
+}
+
+function addMember(){
+let members = JSON.parse(localStorage.getItem("members"));
+members.push({
+name:mname.value,
+position:mpos.value,
+fee:parseInt(mfee.value)
+});
+localStorage.setItem("members", JSON.stringify(members));
+showMembers();
+}
+
+function removeMember(i){
+let members = JSON.parse(localStorage.getItem("members"));
+members.splice(i,1);
+localStorage.setItem("members", JSON.stringify(members));
+showMembers();
+}
+
+function showReports(){
+main.innerHTML="<div class='card'>Monthly & Attendance Upgrade Coming</div>";
+}
