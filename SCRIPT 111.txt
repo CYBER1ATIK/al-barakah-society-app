@@ -11,83 +11,55 @@ localStorage.setItem("members", JSON.stringify([]));
 }
 
 function login(){
-let u = username.value;
-let p = password.value;
+let u = document.getElementById("username").value;
+let p = document.getElementById("password").value;
 
 let users = JSON.parse(localStorage.getItem("users"));
-let user = users.find(x=>x.username===u && x.password===p);
+let user = users.find(x=>x.username===u);
 
-if(user){
+if(!user){
+alert("User not found");
+return;
+}
+
+if(user.password === null){
+showPasswordSetup(user);
+return;
+}
+
+if(user.password === p){
 currentUser=user;
-loginPage.classList.add("hidden");
-app.classList.remove("hidden");
-roleTitle.innerText="Welcome "+user.role.toUpperCase();
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+document.getElementById("roleTitle").innerText="Welcome "+user.role.toUpperCase();
 showDashboard();
 }else{
-alert("Wrong Login");
+alert("Wrong Password");
 }
+}
+
+function showPasswordSetup(user){
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+
+document.getElementById("main").innerHTML=`
+<h2>Set Your Password</h2>
+<input type="password" id="newPass" placeholder="New Password">
+<button onclick="savePassword('${user.username}')">Save Password</button>
+`;
+}
+
+function savePassword(username){
+let users = JSON.parse(localStorage.getItem("users"));
+let user = users.find(x=>x.username===username);
+user.password = document.getElementById("newPass").value;
+
+localStorage.setItem("users", JSON.stringify(users));
+
+alert("Password Set Successfully. Please Login Again.");
+location.reload();
 }
 
 function logout(){
 location.reload();
-}
-
-function showDashboard(){
-let members = JSON.parse(localStorage.getItem("members"));
-let total = members.reduce((sum,m)=> sum + (m.fee || 0),0);
-
-main.innerHTML=`
-<div class="card">Total Members: ${members.length}</div>
-<div class="card">Total Collected: ${total}</div>
-`;
-}
-
-function showMembers(){
-let members = JSON.parse(localStorage.getItem("members"));
-
-let html=`<h3>Members</h3>`;
-
-if(currentUser.role!=="member"){
-html+=`
-<input id="mname" placeholder="Name">
-<input id="mpos" placeholder="Position">
-<input id="mfee" placeholder="Monthly Fee">
-<button onclick="addMember()">Add Member</button>
-`;
-}
-
-members.forEach((m,i)=>{
-html+=`
-<div class="card">
-Name: ${m.name}<br>
-Position: ${m.position}<br>
-Fee: ${m.fee}<br>
-${currentUser.role==="developer" ? `<button onclick="removeMember(${i})">Kick</button>`:""}
-</div>
-`;
-});
-
-main.innerHTML=html;
-}
-
-function addMember(){
-let members = JSON.parse(localStorage.getItem("members"));
-members.push({
-name:mname.value,
-position:mpos.value,
-fee:parseInt(mfee.value)
-});
-localStorage.setItem("members", JSON.stringify(members));
-showMembers();
-}
-
-function removeMember(i){
-let members = JSON.parse(localStorage.getItem("members"));
-members.splice(i,1);
-localStorage.setItem("members", JSON.stringify(members));
-showMembers();
-}
-
-function showReports(){
-main.innerHTML="<div class='card'>Monthly & Attendance Upgrade Coming</div>";
 }
